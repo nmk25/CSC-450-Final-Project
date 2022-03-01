@@ -16,5 +16,5 @@ OpenCV: https://pypi.org/project/opencv-python/
 <br />
 <br />
 <br />
-_Developed by Nathan Kadlec, David Harper, Rhett Proctor, Breven Hinckley & Joshua Lewenczuk (2022)._
+_Developed by Nathan Kadlec, David Harper, Rhett Proctor, Breven Hinckley & Joshua Lewenczuk (2022)_
 
