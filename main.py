@@ -1,5 +1,7 @@
 import numpy as np
 import cv2
+import vlc
+import pyautogui
 
 # Main Function
 def main():
@@ -8,9 +10,13 @@ def main():
     cap = cv2.VideoCapture(0)
 
     # Face classifier
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     # Eye classifier
-    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+    eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
+
+    # VLC Demo
+    media = vlc.MediaPlayer("demo_video.m4v")
+    media.play()
 
     # Runs until q is pressed
     while True:
@@ -33,7 +39,7 @@ def main():
         """ 
         faces = face_cascade.detectMultiScale(gray, 1.15, 5)
 
-
+        eye_count = 0
         for (x, y, w, h) in faces:
             # Draw face rectangle
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
@@ -49,9 +55,17 @@ def main():
             for (ex, ey, ew, eh) in eyes:
                 # Draw eye rectangles
                 cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
+                eye_count += 1
 
         # Display frame
         cv2.imshow('frame', frame)
+
+        # If no eyes detected, pause the video
+        if eye_count == 0:
+            media.set_pause(1)
+        # If media is paused and at least 1 eye detected, play video
+        if not media.is_playing() and eye_count > 0:
+            media.play()
 
         # q to quit
         if cv2.waitKey(1) == ord('q'):
