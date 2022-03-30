@@ -10,6 +10,10 @@ def main():
     # Web Cam Capture
     cap = cv2.VideoCapture(0)
 
+    # Web Cam Brightness variable      
+    # Min: 0, Max: 255, Increment:1 
+    # cap.set(10, 255) 
+
     # Face classifier
     face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
     # Eye classifier
@@ -38,10 +42,10 @@ def main():
         # Convert image to gray scale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # font which we will be using to display FPS
+        # Font for fps
         font = cv2.FONT_HERSHEY_SIMPLEX
-        
-        # time when we finish processing for this frame
+
+        # Time when we finish processing for this frame
         new_frame_time = time.time()
     
         # Calculate the fps
@@ -51,8 +55,8 @@ def main():
         # Convert the fps to string so that we can display it on frame
         fps = str(fps)
     
-        # putting the FPS count on the frame
-        cv2.putText(frame, fps, (7, 70), font, 2, (100, 255, 0), 3, cv2.LINE_AA)
+        # Put fps on frame
+        cv2.putText(frame, fps, (0, 50), font, 2, (100, 255, 0), 3, cv2.LINE_AA)
         
         """
         detectMultiScale 
