@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import cv2
 import vlc
@@ -14,6 +15,12 @@ def main():
     # Eye classifier
     eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 
+    # Used to record the time when we processed last frame
+    prev_frame_time = 0
+    
+    # Used to record the time at which we processed current frame
+    new_frame_time = 0
+
     # VLC Demo
     media = vlc.MediaPlayer("demo_video.m4v")
     media.play()
@@ -24,9 +31,28 @@ def main():
         # frame: Image represented as numpy array
         ret, frame = cap.read()
 
+        # Break if webcam unavailable
+        if not ret:
+            break
+
         # Convert image to gray scale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        # font which we will be using to display FPS
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        
+        # time when we finish processing for this frame
+        new_frame_time = time.time()
+    
+        # Calculate the fps
+        fps = int(1/(new_frame_time-prev_frame_time))
+        prev_frame_time = new_frame_time
+    
+        # Convert the fps to string so that we can display it on frame
+        fps = str(fps)
+    
+        # putting the FPS count on the frame
+        cv2.putText(frame, fps, (7, 70), font, 2, (100, 255, 0), 3, cv2.LINE_AA)
         
         """
         detectMultiScale 
