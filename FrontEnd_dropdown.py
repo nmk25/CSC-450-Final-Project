@@ -1,20 +1,37 @@
+from operator import mod
 from tkinter import *
 from PIL import ImageTk,Image
-
-# Will execute selected command in EyeTrack (work in progress)
-def backendLink():
-    x = 0
+from numpy import eye, var
+from modes.eyeMode import eyeMode
+from modes.faceMode import faceMode
+from modes.presenceMode import presenceMode
 
 root = Tk()
 root.title('EyeTrack')
 root.geometry("400x400")
+modeVar = IntVar()
+modeVar.set(1)
+lowLight = IntVar()
+lowLight.set(0)
+pauseDelay = IntVar()
+pauseDelay.set(0)
 
+# Will execute selected command in EyeTrack (work in progress)
+def backendLink():
+
+   if modeVar.get() == 1:
+      eyeMode(lowLight)
+   elif modeVar.get() == 2:
+      faceMode(lowLight)
+   elif modeVar.get() == 3:
+      presenceMode(lowLight)
+    
 #Closes the popup window
 def close_win(top):
    top.destroy()
 
 #Creates popup window to enter pause delay
-def popupwin():
+def popupwin(root):
    #Creates a Toplevel window
    top = Toplevel(root)
    top.geometry("250x100")
@@ -27,18 +44,22 @@ def popupwin():
    button= Button(top, text="OK", command=lambda:close_win(top))
    button.pack(pady=5, side= TOP)
 
-#Creates dropdown menu
-menubar = Menu(root)
-optionsmenu = Menu(menubar, tearoff = 0)
-optionsmenu.add_radiobutton(label = "Eye Mode", command = lambda:backendLink())
-optionsmenu.add_radiobutton(label = "Face Mode", command = lambda:backendLink())
-optionsmenu.add_radiobutton(label = "Presence Mode", command = lambda:backendLink())
-optionsmenu.add_checkbutton(label = "Low Light On/Off", command = lambda:backendLink())
-optionsmenu.add_command(label = "Set Pause Delay", command = lambda:popupwin())
-optionsmenu.add_separator()
-optionsmenu.add_command(label = "Exit", command = root.quit)
-menubar.add_cascade(label = "Options", menu = optionsmenu)
+def mainMenu():
 
+   #Creates dropdown menu
+   menubar = Menu(root)
+   optionsmenu = Menu(menubar, tearoff = 0)
+   optionsmenu.add_radiobutton(label = "Eye Mode", value=1, variable=modeVar)
+   optionsmenu.add_radiobutton(label = "Face Mode", value=2, variable=modeVar)
+   optionsmenu.add_radiobutton(label = "Presence Mode", value=3, variable=modeVar)
+   optionsmenu.add_checkbutton(label = "Low Light On/Off", variable=lowLight)
+   optionsmenu.add_command(label = "Set Pause Delay", command = lambda:popupwin(root))
+   optionsmenu.add_separator()
+   optionsmenu.add_command(label = "Exit", command = root.quit)
+   menubar.add_cascade(label = "Options", menu = optionsmenu)
 
-root.config(menu=menubar)
-root.mainloop()
+   startButton = Button(root, text="Start", command= lambda:backendLink())
+   startButton.place(relx=0.5, rely=0.5, anchor=CENTER)
+
+   root.config(menu=menubar)
+   root.mainloop()
