@@ -2,7 +2,7 @@ import cv2
 import vlc
 import time
 
-def eyeMode(lowLight): 
+def eyeModeAlternative(lowLight): 
     
     # Web Cam Capture
     cap = cv2.VideoCapture(0)
@@ -14,10 +14,8 @@ def eyeMode(lowLight):
     else:
         cap.set(10, 150)
 
-    # Face classifier
-    face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
     # Eye classifier
-    eye_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_eye.xml')
+    eye_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_eye_tree_eyeglasses.xml')
 
     # Used to record the time when we processed last frame
     prev_frame_time = 0
@@ -67,24 +65,13 @@ def eyeMode(lowLight):
         :param minNeighbors	    Parameter specifying how many neighbors each candidate rectangle should have to retain it.
         :return:                The detected objects are returned as a list of rectangles.
         """ 
-        faces = face_cascade.detectMultiScale(gray, 1.15, 5)
+        eyes = eye_cascade.detectMultiScale(gray, 1.15, 5)
 
         eye_count = 0
-        for (x, y, w, h) in faces:
+        for (x, y, w, h) in eyes:
             # Draw face rectangle
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
-
-            # Region of interest (face)
-            roi_gray = gray[y:y+w, x:x+w]
-            roi_color = frame[y:y+h, x:x+w]
-
-            # Detect eyes
-            eyes = eye_cascade.detectMultiScale(roi_gray, 1.15, 5)
-
-            for (ex, ey, ew, eh) in eyes:
-                # Draw eye rectangles
-                cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 5)
-                eye_count += 1
+            eye_count += 1
 
         # Display frame
         cv2.imshow('frame', frame)

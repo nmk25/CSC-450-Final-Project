@@ -2,6 +2,7 @@ from operator import mod
 from tkinter import *
 from PIL import ImageTk,Image
 from numpy import eye, var
+from modes.eyeModeAlternative import eyeModeAlternative
 from modes.eyeMode import eyeMode
 from modes.faceMode import faceMode
 from modes.presenceMode import presenceMode
@@ -20,7 +21,8 @@ pauseDelay.set(0)
 def backendLink():
 
    if modeVar.get() == 1:
-      eyeMode(lowLight)
+      #eyeMode(lowLight)
+      eyeModeAlternative(lowLight)
    elif modeVar.get() == 2:
       faceMode(lowLight)
    elif modeVar.get() == 3:
