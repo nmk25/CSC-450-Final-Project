@@ -2,7 +2,7 @@ import cv2
 import vlc
 import time
 
-def presenceMode(lowLight): 
+def presenceMode(lowLight, pauseDelay): 
     # Web Cam Capture
     cap = cv2.VideoCapture(0)
 
@@ -31,6 +31,10 @@ def presenceMode(lowLight):
     # VLC Demo
     media = vlc.MediaPlayer("demo_video.m4v")
     media.play()
+
+    # Timer variables for pause delay
+    time_started = False 
+    start_time = 0
 
     # Runs until q is pressed
     while True:
@@ -102,11 +106,24 @@ def presenceMode(lowLight):
 
         # Display frame
         cv2.imshow('frame', frame)
-
-        # If no eyes detected, pause the video
-        if detection_count == 0:
+        
+        # If no eyes detected, and timer hasn't started, start timer        
+        if detection_count == 0 and not time_started:
+            start_time = time.time()
+            time_started = True
+        # If no eyes detected, timer started, and time elapsed greater than pause delay, pause video
+        elif detection_count == 0 and time_started and time.time() - start_time > pauseDelay.get():
+            print("Pause time: {}".format(time.time() - start_time))
+            start_time = 0
+            time_started = False
             media.set_pause(1)
-        # If media is paused and a person is detected, play video
+        # If eyes detected, and timer started, reset timer to 0
+        elif detection_count > 0 and time_started:
+            start_time = 0
+            time_started = False
+
+
+        # If media is paused and at least 1 eye detected, play video
         if not media.is_playing() and detection_count > 0:
             media.play()
 

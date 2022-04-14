@@ -21,15 +21,17 @@ pauseDelay.set(0)
 def backendLink():
 
    if modeVar.get() == 1:
-      #eyeMode(lowLight)
-      eyeModeAlternative(lowLight)
+      eyeMode(lowLight, pauseDelay)
+      #eyeModeAlternative(lowLight, pauseDelay)
    elif modeVar.get() == 2:
-      faceMode(lowLight)
+      faceMode(lowLight, pauseDelay)
    elif modeVar.get() == 3:
-      presenceMode(lowLight)
+      presenceMode(lowLight, pauseDelay)
     
 #Closes the popup window
-def close_win(top):
+def close_win(top, entry):
+   pauseDelay.set(int(entry.get()))
+   print("Pause delay: {} seconds".format(pauseDelay.get()))
    top.destroy()
 
 #Creates popup window to enter pause delay
@@ -41,9 +43,10 @@ def popupwin(root):
    #Creates Entry Widget in the Toplevel window
    entry = Entry(top, width= 25)
    entry.pack()
+   print(entry.get())
 
    #Creates Button Widget in the Toplevel Window
-   button= Button(top, text="OK", command=lambda:close_win(top))
+   button= Button(top, text="OK", command=lambda:close_win(top, entry))
    button.pack(pady=5, side= TOP)
 
 def mainMenu():

@@ -1,8 +1,9 @@
 import cv2
+from numpy import eye
 import vlc
 import time
 
-def eyeMode(lowLight): 
+def eyeMode(lowLight, pauseDelay): 
     
     # Web Cam Capture
     cap = cv2.VideoCapture(0)
@@ -28,6 +29,10 @@ def eyeMode(lowLight):
     # VLC Demo
     media = vlc.MediaPlayer("demo_video.m4v")
     media.play()
+
+    # Timer variables for pause delay
+    time_started = False 
+    start_time = 0
 
     # Runs until q is pressed
     while True:
@@ -89,9 +94,22 @@ def eyeMode(lowLight):
         # Display frame
         cv2.imshow('frame', frame)
 
-        # If no eyes detected, pause the video
-        if eye_count == 0:
+        # If no eyes detected, and timer hasn't started, start timer        
+        if eye_count == 0 and not time_started:
+            start_time = time.time()
+            time_started = True
+        # If no eyes detected, timer started, and time elapsed greater than pause delay, pause video
+        elif eye_count == 0 and time_started and time.time() - start_time > pauseDelay.get():
+            print("Pause time: {}".format(time.time() - start_time))
+            start_time = 0
+            time_started = False
             media.set_pause(1)
+        # If eyes detected, and timer started, reset timer to 0
+        elif eye_count > 0 and time_started:
+            start_time = 0
+            time_started = False
+
+
         # If media is paused and at least 1 eye detected, play video
         if not media.is_playing() and eye_count > 0:
             media.play()
