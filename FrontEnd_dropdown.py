@@ -1,7 +1,7 @@
 from operator import mod
 from tkinter import *
 from PIL import ImageTk,Image
-from numpy import eye, var
+from numpy import double, eye, var
 from modes.eyeModeAlternative import eyeModeAlternative
 from modes.eyeMode import eyeMode
 from modes.faceMode import faceMode
@@ -14,10 +14,10 @@ modeVar = IntVar()
 modeVar.set(1)
 lowLight = IntVar()
 lowLight.set(0)
-pauseDelay = IntVar()
-pauseDelay.set(0)
+pauseDelay = DoubleVar()
+pauseDelay.set(0.5)
 
-# Will execute selected command in EyeTrack (work in progress)
+# Mode select from backend
 def backendLink():
 
    if modeVar.get() == 1:
@@ -28,30 +28,36 @@ def backendLink():
    elif modeVar.get() == 3:
       presenceMode(lowLight, pauseDelay)
     
-#Closes the popup window
+# Closes the popup window
 def close_win(top, entry):
-   pauseDelay.set(int(entry.get()))
-   print("Pause delay: {} seconds".format(pauseDelay.get()))
-   top.destroy()
+   try:
+      if (double(entry.get()) >= 0):
+         pauseDelay.set(double(entry.get()))
+         print("Pause delay: {} seconds".format(pauseDelay.get()))
+         top.destroy()
+      else:
+         print("Please enter a positive number.")
+   except ValueError:
+      print("Please enter a valid number.")
+   
 
-#Creates popup window to enter pause delay
+# Creates popup window to enter pause delay
 def popupwin(root):
-   #Creates a Toplevel window
+   # Creates a Toplevel window
    top = Toplevel(root)
    top.geometry("250x100")
 
-   #Creates Entry Widget in the Toplevel window
+   # Creates Entry Widget in the Toplevel window
    entry = Entry(top, width= 25)
    entry.pack()
-   print(entry.get())
 
-   #Creates Button Widget in the Toplevel Window
+   # Creates Button Widget in the Toplevel Window
    button= Button(top, text="OK", command=lambda:close_win(top, entry))
    button.pack(pady=5, side= TOP)
 
 def mainMenu():
 
-   #Creates dropdown menu
+   # Creates dropdown menu
    menubar = Menu(root)
    optionsmenu = Menu(menubar, tearoff = 0)
    optionsmenu.add_radiobutton(label = "Eye Mode", value=1, variable=modeVar)
