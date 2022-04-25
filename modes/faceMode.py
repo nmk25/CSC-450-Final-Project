@@ -2,7 +2,7 @@ import cv2
 import vlc
 import time
 
-def faceMode(lowLight, pauseDelay): 
+def faceMode(lowLight, pauseDelay, filePath): 
     # Web Cam Capture
     cap = cv2.VideoCapture(0)
 
@@ -24,8 +24,8 @@ def faceMode(lowLight, pauseDelay):
     # Used to record the time at which we processed current frame
     new_frame_time = 0
 
-    # VLC Demo
-    media = vlc.MediaPlayer("demo_video.m4v")
+    # Get media file path
+    media = vlc.MediaPlayer(filePath)
     media.play()
 
     # Timer variables for pause delay

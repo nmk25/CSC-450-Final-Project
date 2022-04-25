@@ -6,6 +6,9 @@ from modes.eyeModeAlternative import eyeModeAlternative
 from modes.eyeMode import eyeMode
 from modes.faceMode import faceMode
 from modes.presenceMode import presenceMode
+import tkinter as tk
+from tkinter import filedialog
+
 
 root = Tk()
 root.title('EyeTrack')
@@ -16,17 +19,18 @@ lowLight = IntVar()
 lowLight.set(0)
 pauseDelay = DoubleVar()
 pauseDelay.set(0.5)
+filePath = ""
 
 # Mode select from backend
-def backendLink():
+def backendLink(filePath):
 
    if modeVar.get() == 1:
-      eyeMode(lowLight, pauseDelay)
-      #eyeModeAlternative(lowLight, pauseDelay)
+      eyeMode(lowLight, pauseDelay, filePath)
+      #eyeModeAlternative(lowLight, pauseDelay, filePath)
    elif modeVar.get() == 2:
-      faceMode(lowLight, pauseDelay)
+      faceMode(lowLight, pauseDelay, filePath)
    elif modeVar.get() == 3:
-      presenceMode(lowLight, pauseDelay)
+      presenceMode(lowLight, pauseDelay, filePath)
     
 # Closes the popup window
 def close_win(top, entry):
@@ -55,10 +59,22 @@ def popupwin(root):
    button= Button(top, text="OK", command=lambda:close_win(top, entry))
    button.pack(pady=5, side= TOP)
 
+def openDirectory():
+   root = tk.Tk()
+   root.withdraw()
+   videoTypes = ".avchd .avi .bik .f4v .flv .h264 .m1v .m2v .m4v .mjpg .mp4 .mpeg1 .mpeg4 .mpg2 .mpv .mts .nsv .nuv .ogv .pss .svi .tod .trp .ts .vp6 .vro .webm"
+   filePath = filedialog.askopenfilename(filetypes=[("Video files", videoTypes)])
+   root.destroy()
+   if (len(filePath) > 0):
+      backendLink(filePath)
+   
+
 def mainMenu():
 
    # Creates dropdown menu
    menubar = Menu(root)
+   fileMenu = Menu(menubar, tearoff=0)
+   fileMenu.add_radiobutton(label = "Open File...", command = lambda:openDirectory())
    optionsmenu = Menu(menubar, tearoff = 0)
    optionsmenu.add_radiobutton(label = "Eye Mode", value=1, variable=modeVar)
    optionsmenu.add_radiobutton(label = "Face Mode", value=2, variable=modeVar)
@@ -67,10 +83,9 @@ def mainMenu():
    optionsmenu.add_command(label = "Set Pause Delay", command = lambda:popupwin(root))
    optionsmenu.add_separator()
    optionsmenu.add_command(label = "Exit", command = root.quit)
+   menubar.add_cascade(label = "Media", menu = fileMenu)
    menubar.add_cascade(label = "Options", menu = optionsmenu)
 
-   startButton = Button(root, text="Start", command= lambda:backendLink())
-   startButton.place(relx=0.5, rely=0.5, anchor=CENTER)
 
    root.config(menu=menubar)
    root.mainloop()
