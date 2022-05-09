@@ -12,14 +12,27 @@ from tkinter import filedialog
 
 root = Tk()
 root.title('Eye Pause')
-root.geometry("300x225")
 
+# Root window dimensions
+w = 300
+h = 225 
+
+# Get screen width and height
+ws = root.winfo_screenwidth()
+hs = root.winfo_screenheight()
+
+# Calculate x and y coordinates for the Tk root window
+x = (ws/2) - (w/2)
+y = (hs/2) - (h/2)
+
+# Set dimensions and place of window
+root.geometry('%dx%d+%d+%d' % (w, h, x, y - 75))
+
+# Background image
 image = Image.open("eye.png")
 img = ImageTk.PhotoImage(image.resize((275, 200))) 
 label = Label(root, image = img)
 label.pack(pady=10)
-
-# Create a Label Widget to display the text or Image
 
 modeVar = IntVar()
 modeVar.set(1)
@@ -54,10 +67,21 @@ def close_win(top, entry, msg):
 
 # Creates popup window to enter pause delay
 def popupwin(root):
-   # Creates a Toplevel window
+
+   # Create a Toplevel window
    top = Toplevel(root)
-   top.geometry("225x100")
    top.title("Set Pause Delay")
+
+   # Top window dimensions
+   w = 225
+   h = 100 
+
+   # Calculate x and y coordinates for the Tk root window
+   x = (ws/2) - (w/2)
+   y = (hs/2) - (h/2)
+
+   # Set dimensions and place of window
+   top.geometry('%dx%d+%d+%d' % (w, h, x, y - 75))
 
    # Text label for input validation
    msg = Label(top, text="Enter a time in seconds.")
@@ -71,6 +95,7 @@ def popupwin(root):
    button= Button(top, text="SET", command=lambda:close_win(top, entry, msg))
    button.pack(pady=5, side= TOP)
 
+# File directory
 def openDirectory():
    root = tk.Tk()
    root.withdraw()
