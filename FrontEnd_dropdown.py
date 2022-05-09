@@ -17,7 +17,7 @@ root.geometry("300x225")
 image = Image.open("eye.png")
 img = ImageTk.PhotoImage(image.resize((275, 200))) 
 label = Label(root, image = img)
-label.pack()
+label.pack(pady=10)
 
 # Create a Label Widget to display the text or Image
 
@@ -41,31 +41,34 @@ def backendLink(filePath):
       presenceMode(lowLight, pauseDelay, filePath)
     
 # Closes the popup window
-def close_win(top, entry):
+def close_win(top, entry, msg):
    try:
       if (double(entry.get()) >= 0):
          pauseDelay.set(double(entry.get()))
          print("Pause delay: {} seconds".format(pauseDelay.get()))
          top.destroy()
       else:
-         print("Please enter a positive number.")
+         msg.config(text="Please enter a positive number.")
    except ValueError:
-      print("Please enter a valid number.")
-   
+      msg.config(text="Please enter a valid time.")
 
 # Creates popup window to enter pause delay
 def popupwin(root):
    # Creates a Toplevel window
    top = Toplevel(root)
-   top.geometry("250x100")
+   top.geometry("225x100")
    top.title("Set Pause Delay")
+
+   # Text label for input validation
+   msg = Label(top, text="Enter a time in seconds.")
+   msg.pack(pady=5)
 
    # Creates Entry Widget in the Toplevel window
    entry = Entry(top, width= 25)
    entry.pack()
 
    # Creates Button Widget in the Toplevel Window
-   button= Button(top, text="OK", command=lambda:close_win(top, entry))
+   button= Button(top, text="SET", command=lambda:close_win(top, entry, msg))
    button.pack(pady=5, side= TOP)
 
 def openDirectory():

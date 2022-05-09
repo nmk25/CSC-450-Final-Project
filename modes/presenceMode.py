@@ -88,7 +88,7 @@ def presenceMode(lowLight, pauseDelay, filePath):
             detection_count += 1
 
         # Display frame
-        cv2.imshow('frame', frame)
+        cv2.imshow('Camera Capture', frame)
         
         # If no eyes detected, and timer hasn't started, start timer        
         if detection_count == 0 and not time_started:

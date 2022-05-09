@@ -78,7 +78,7 @@ def eyeModeAlternative(lowLight, pauseDelay, filePath):
             eye_count += 1
 
         # Display frame
-        cv2.imshow('frame', frame)
+        cv2.imshow('Camera Capture', frame)
 
         # If no eyes detected, and timer hasn't started, start timer        
         if eye_count == 0 and not time_started:
