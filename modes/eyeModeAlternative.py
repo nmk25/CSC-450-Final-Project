@@ -69,7 +69,7 @@ def eyeModeAlternative(lowLight, pauseDelay, filePath):
         :param minNeighbors	    Parameter specifying how many neighbors each candidate rectangle should have to retain it.
         :return:                The detected objects are returned as a list of rectangles.
         """ 
-        eyes = eye_cascade.detectMultiScale(gray, 1.15, 5)
+        eyes = eye_cascade.detectMultiScale(gray, 1.25, 5)
 
         eye_count = 0
         for (x, y, w, h) in eyes:
@@ -86,7 +86,6 @@ def eyeModeAlternative(lowLight, pauseDelay, filePath):
             time_started = True
         # If no eyes detected, timer started, and time elapsed greater than pause delay, pause video
         elif eye_count == 0 and time_started and time.time() - start_time > pauseDelay.get():
-            print("Pause time: {}".format(time.time() - start_time))
             start_time = 0
             time_started = False
             media.set_pause(1)

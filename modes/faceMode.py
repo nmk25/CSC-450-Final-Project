@@ -96,7 +96,6 @@ def faceMode(lowLight, pauseDelay, filePath):
             time_started = True
         # If no eyes detected, timer started, and time elapsed greater than pause delay, pause video
         elif detection_count == 0 and time_started and time.time() - start_time > pauseDelay.get():
-            print("Pause time: {}".format(time.time() - start_time))
             start_time = 0
             time_started = False
             media.set_pause(1)

@@ -15,10 +15,7 @@ def presenceMode(lowLight, pauseDelay, filePath):
 
     # Front Face classifier
     front_face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_default.xml')
-    # Profile Face classifier
-    profile_face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_profileface.xml')
-    # Full Body classifier
-    full_body_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_fullbody.xml')
+    
     # Upper Body classifier
     upper_body_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_upperbody.xml')
 
@@ -77,28 +74,14 @@ def presenceMode(lowLight, pauseDelay, filePath):
         :param minNeighbors	    Parameter specifying how many neighbors each candidate rectangle should have to retain it.
         :return:                The detected objects are returned as a list of rectangles.
         """ 
-        front_faces = front_face_cascade.detectMultiScale(gray, 1.5, 6)
+        front_faces = front_face_cascade.detectMultiScale(gray, 1.3, 4)
 
         for (x, y, w, h) in front_faces:
             # Draw face rectangle
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 5)
             detection_count += 1
 
-        profile_faces = profile_face_cascade.detectMultiScale(gray, 1.5, 6)
-
-        for (x, y, w, h) in profile_faces:
-            # Draw face rectangle
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 5)
-            detection_count += 1
-        
-        full_body = full_body_cascade.detectMultiScale(gray, 1.5, 6)
-        
-        for (x, y, w, h) in full_body:
-            # Draw body rectangle
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 5)
-            detection_count += 1
-
-        upper_body = upper_body_cascade.detectMultiScale(gray, 1.5, 6)
+        upper_body = upper_body_cascade.detectMultiScale(gray, 1.1, 2)
         for (x, y, w, h) in upper_body:
             # Draw body rectangle
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 5)
@@ -113,7 +96,6 @@ def presenceMode(lowLight, pauseDelay, filePath):
             time_started = True
         # If no eyes detected, timer started, and time elapsed greater than pause delay, pause video
         elif detection_count == 0 and time_started and time.time() - start_time > pauseDelay.get():
-            print("Pause time: {}".format(time.time() - start_time))
             start_time = 0
             time_started = False
             media.set_pause(1)

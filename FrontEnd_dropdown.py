@@ -33,8 +33,8 @@ filePath = ""
 def backendLink(filePath):
 
    if modeVar.get() == 1:
-      eyeMode(lowLight, pauseDelay, filePath)
-      #eyeModeAlternative(lowLight, pauseDelay, filePath)
+      #eyeMode(lowLight, pauseDelay, filePath)
+      eyeModeAlternative(lowLight, pauseDelay, filePath)
    elif modeVar.get() == 2:
       faceMode(lowLight, pauseDelay, filePath)
    elif modeVar.get() == 3:
