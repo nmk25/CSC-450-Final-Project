@@ -11,8 +11,16 @@ from tkinter import filedialog
 
 
 root = Tk()
-root.title('EyeTrack')
-root.geometry("400x400")
+root.title('Eye Pause')
+root.geometry("300x225")
+
+image = Image.open("eye.png")
+img = ImageTk.PhotoImage(image.resize((275, 200))) 
+label = Label(root, image = img)
+label.pack()
+
+# Create a Label Widget to display the text or Image
+
 modeVar = IntVar()
 modeVar.set(1)
 lowLight = IntVar()
@@ -50,6 +58,7 @@ def popupwin(root):
    # Creates a Toplevel window
    top = Toplevel(root)
    top.geometry("250x100")
+   top.title("Set Pause Delay")
 
    # Creates Entry Widget in the Toplevel window
    entry = Entry(top, width= 25)
