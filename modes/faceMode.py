@@ -2,9 +2,7 @@ import cv2
 import vlc
 import time
 
-def faceMode(lowLight, pauseDelay, filePath): 
-    # Web Cam Capture
-    cap = cv2.VideoCapture(0)
+def faceMode(lowLight, pauseDelay, filePath, cap): 
 
     # Web Cam Brightness variable      
     # Min: 0, Max: 255, Increment:1 

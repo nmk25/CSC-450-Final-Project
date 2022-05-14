@@ -8,6 +8,7 @@ from modes.faceMode import faceMode
 from modes.presenceMode import presenceMode
 import tkinter as tk
 from tkinter import filedialog
+import cv2
 
 
 root = Tk()
@@ -45,13 +46,37 @@ filePath = ""
 # Mode select from backend
 def backendLink(filePath):
 
-   if modeVar.get() == 1:
-      #eyeMode(lowLight, pauseDelay, filePath)
-      eyeModeAlternative(lowLight, pauseDelay, filePath)
-   elif modeVar.get() == 2:
-      faceMode(lowLight, pauseDelay, filePath)
-   elif modeVar.get() == 3:
-      presenceMode(lowLight, pauseDelay, filePath)
+   # Web Cam Capture
+   cap = cv2.VideoCapture(0)
+
+   # Check capture
+   if cap is None or not cap.isOpened():
+      # Create a Toplevel window
+      top = Toplevel(root)
+      top.title("Capture Error")
+
+       # Top window dimensions
+      w = 225
+      h = 50
+
+      # Calculate x and y coordinates for the Tk root window
+      x = (ws/2) - (w/2)
+      y = (hs/2) - (h/2)
+
+      # Set dimensions and place of window
+      top.geometry('%dx%d+%d+%d' % (w, h, x, y - 75))
+
+      # Text label
+      msg = Label(top, text="Error: No camera was detected.")
+      msg.pack(pady=10)
+   else:
+      if modeVar.get() == 1:
+         #eyeMode(lowLight, pauseDelay, filePath, cap)
+         eyeModeAlternative(lowLight, pauseDelay, filePath, cap)
+      elif modeVar.get() == 2:
+         faceMode(lowLight, pauseDelay, filePath, cap)
+      elif modeVar.get() == 3:
+         presenceMode(lowLight, pauseDelay, filePath, cap)
     
 # Closes the popup window
 def close_win(top, entry, msg):
