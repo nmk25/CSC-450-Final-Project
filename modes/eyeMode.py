@@ -111,7 +111,7 @@ def eyeMode(lowLight, pauseDelay, filePath, cap):
             media.play()
 
         # q to quit
-        if cv2.waitKey(1) == ord('q'):
+        if cv2.waitKey(1) == ord('q') or cv2.getWindowProperty('Camera Capture', cv2.WND_PROP_VISIBLE) < 1:
             break
 
     # Release web camera resource    
